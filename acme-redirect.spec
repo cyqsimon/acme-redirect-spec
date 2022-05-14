@@ -9,7 +9,7 @@ License:        GPLv3
 URL:            https://github.com/kpcyrd/acme-redirect
 Source0:        https://github.com/kpcyrd/acme-redirect/archive/v%{version}.tar.gz
 
-BuildRequires:  cargo rust openssl-devel
+BuildRequires:  cargo rust openssl-devel scdoc
 Requires:       glibc libgcc openssl-libs
 
 %description
@@ -21,6 +21,7 @@ redirects everything else to https
 
 %build
 cargo build --release
+make docs
 
 %install
 install -Dm 755 -t %{buildroot}%{_bindir} target/release/acme-redirect
@@ -33,6 +34,11 @@ install -Dm 644 -t %{buildroot}%{_libdir}/systemd/system \
 
 install -Dm 644 contrib/systemd/acme-redirect.sysusers %{buildroot}%{_libdir}/sysusers.d/acme-redirect.conf
 install -Dm 644 contrib/systemd/acme-redirect.tmpfiles %{buildroot}%{_libdir}/tmpfiles.d/acme-redirect.conf
+
+install -Dm 644 -t %{buildroot}%{_mandir}/man1 contrib/docs/acme-redirect.1
+install -Dm 644 -t %{buildroot}%{_mandir}/man5 \
+    contrib/docs/acme-redirect.conf.5 \
+    contrib/docs/acme-redirect.d.5
 
 %post
 systemd-sysusers
@@ -47,6 +53,9 @@ systemd-tmpfiles --create
 %{_libdir}/systemd/system/acme-redirect.service
 %{_libdir}/sysusers.d/acme-redirect.conf
 %{_libdir}/tmpfiles.d/acme-redirect.conf
+%{_mandir}/man1/acme-redirect.1.gz
+%{_mandir}/man5/acme-redirect.conf.5.gz
+%{_mandir}/man5/acme-redirect.d.5.gz
 %license LICENSE
 %doc README.md
 
