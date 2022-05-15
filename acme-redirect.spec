@@ -24,6 +24,15 @@ cargo build --release
 make docs
 
 %install
+# `install -D -t <dir>` does not correctly create `<dir>` on EL7
+%if 0%{?el7}
+    mkdir -p \
+        %{buildroot}%{_bindir} \
+        %{buildroot}%{_sysconfdir} \
+        %{buildroot}%{_libdir}/systemd/system \
+        %{buildroot}%{_mandir}/man{1,5}
+%endif
+
 install -Dm 755 -t %{buildroot}%{_bindir} target/release/acme-redirect
 install -Dm 644 -t %{buildroot}%{_sysconfdir} contrib/confs/acme-redirect.conf
 install -Dm 644 contrib/confs/certs.d/example.com.conf %{buildroot}%{_sysconfdir}/acme-redirect.d/example.com.conf.sample
