@@ -9,7 +9,7 @@ License:        GPLv3
 URL:            https://github.com/kpcyrd/acme-redirect
 Source0:        https://github.com/kpcyrd/acme-redirect/archive/v%{version}.tar.gz
 
-BuildRequires:  cargo rust openssl-devel scdoc
+BuildRequires:  cargo make rust openssl-devel scdoc
 Requires:       glibc libgcc openssl-libs
 
 %description
