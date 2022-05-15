@@ -2,7 +2,7 @@
 
 Name:           acme-redirect
 Version:        0.5.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ACME answerer & 80-to-443 redirector
 
 License:        GPLv3
@@ -22,28 +22,41 @@ redirects everything else to https
 %build
 cargo build --release
 make docs
+target/release/acme-redirect completions bash > bash.completion
+target/release/acme-redirect completions zsh > zsh.completion
+target/release/acme-redirect completions fish > fish.completion
 
 %install
 # `install -D -t <dir>` does not correctly create `<dir>` on EL7
 %if 0%{?el7}
-    mkdir -p \
+    install -d \
         %{buildroot}%{_bindir} \
         %{buildroot}%{_sysconfdir} \
         %{buildroot}%{_libdir}/systemd/system \
         %{buildroot}%{_mandir}/man{1,5}
 %endif
 
+# binary
 install -Dm 755 -t %{buildroot}%{_bindir} target/release/acme-redirect
+
+# config
 install -Dm 644 -t %{buildroot}%{_sysconfdir} contrib/confs/acme-redirect.conf
 install -Dm 644 contrib/confs/certs.d/example.com.conf %{buildroot}%{_sysconfdir}/acme-redirect.d/example.com.conf.sample
+
+# completion
+install -Dm 644 bash.completion %{buildroot}%{_datadir}/bash-completion/completions/acme-redirect
+install -Dm 644 zsh.completion %{buildroot}%{_datadir}/zsh/site-functions/_acme-redirect
+install -Dm 644 fish.completion %{buildroot}%{_datadir}/fish/vendor_completions.d/acme-redirect.fish
+
+# systemd
 install -Dm 644 -t %{buildroot}%{_libdir}/systemd/system \
     contrib/systemd/acme-redirect-renew.service \
     contrib/systemd/acme-redirect-renew.timer \
     contrib/systemd/acme-redirect.service
-
 install -Dm 644 contrib/systemd/acme-redirect.sysusers %{buildroot}%{_libdir}/sysusers.d/acme-redirect.conf
 install -Dm 644 contrib/systemd/acme-redirect.tmpfiles %{buildroot}%{_libdir}/tmpfiles.d/acme-redirect.conf
 
+# manpage
 install -Dm 644 -t %{buildroot}%{_mandir}/man1 contrib/docs/acme-redirect.1
 install -Dm 644 -t %{buildroot}%{_mandir}/man5 \
     contrib/docs/acme-redirect.conf.5 \
@@ -57,6 +70,9 @@ systemd-tmpfiles --create
 %{_bindir}/acme-redirect
 %config(noreplace) %{_sysconfdir}/acme-redirect.conf
 %config %{_sysconfdir}/acme-redirect.d/example.com.conf.sample
+%{_datadir}/bash-completion/completions/acme-redirect
+%{_datadir}/zsh/site-functions/_acme-redirect
+%{_datadir}/fish/vendor_completions.d/acme-redirect.fish
 %{_libdir}/systemd/system/acme-redirect-renew.service
 %{_libdir}/systemd/system/acme-redirect-renew.timer
 %{_libdir}/systemd/system/acme-redirect.service
