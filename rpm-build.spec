@@ -2,7 +2,7 @@
 
 Name:           acme-redirect
 Version:        0.5.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        ACME answerer & 80-to-443 redirector
 
 License:        GPLv3
@@ -10,7 +10,7 @@ URL:            https://github.com/kpcyrd/acme-redirect
 Source0:        https://github.com/kpcyrd/acme-redirect/archive/v%{version}.tar.gz
 
 BuildRequires:  cargo make rust openssl-devel scdoc
-Requires:       glibc libgcc openssl-libs
+Requires:       glibc
 
 %description
 Tiny http daemon that answers acme challenges and
@@ -20,7 +20,7 @@ redirects everything else to https
 %autosetup
 
 %build
-cargo build --release
+RUSTFLAGS="-C strip=symbols" cargo build --release
 make docs
 target/release/acme-redirect completions bash > bash.completion
 target/release/acme-redirect completions zsh > zsh.completion
@@ -85,5 +85,11 @@ systemd-tmpfiles --create
 %doc README.md
 
 %changelog
+* Mon May 16 2022 cyqsimon - 0.5.3-3
+- Apply rpmlint suggestions
+
+* Mon May 16 2022 cyqsimon - 0.5.3-2
+- Install shell completions
+
 * Tue Apr 05 2022 cyqsimon - 0.5.3-1
-- Fix "missing field `contact` at line 13 column 1" error caused by letsencrypt api response change
+- Initial build
