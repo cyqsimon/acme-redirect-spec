@@ -63,8 +63,13 @@ install -Dm 644 -t %{buildroot}%{_mandir}/man5 \
     contrib/docs/acme-redirect.d.5
 
 %post
+systemctl daemon-reload
 systemd-sysusers
 systemd-tmpfiles --create
+
+if systemctl --quiet is-active acme-redirect.service; then
+    systemctl restart acme-redirect.service
+fi
 
 %files
 %{_bindir}/acme-redirect
