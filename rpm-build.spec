@@ -73,19 +73,24 @@ fi
 
 %files
 %{_bindir}/acme-redirect
+
 %config(noreplace) %{_sysconfdir}/acme-redirect.conf
 %config %{_sysconfdir}/acme-redirect.d/example.com.conf.sample
+
 %{_datadir}/bash-completion/completions/acme-redirect
 %{_datadir}/zsh/site-functions/_acme-redirect
 %{_datadir}/fish/vendor_completions.d/acme-redirect.fish
+
 %{_libdir}/systemd/system/acme-redirect-renew.service
 %{_libdir}/systemd/system/acme-redirect-renew.timer
 %{_libdir}/systemd/system/acme-redirect.service
 %{_libdir}/sysusers.d/acme-redirect.conf
 %{_libdir}/tmpfiles.d/acme-redirect.conf
+
 %{_mandir}/man1/acme-redirect.1.gz
 %{_mandir}/man5/acme-redirect.conf.5.gz
 %{_mandir}/man5/acme-redirect.d.5.gz
+
 %license LICENSE
 %doc README.md
 
