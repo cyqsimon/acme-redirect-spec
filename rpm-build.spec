@@ -2,7 +2,7 @@
 
 Name:           acme-redirect
 Version:        0.5.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        ACME answerer & 80-to-443 redirector
 
 License:        GPLv3
