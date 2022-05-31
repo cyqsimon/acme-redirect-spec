@@ -95,6 +95,9 @@ fi
 %doc README.md
 
 %changelog
+* Wed May 25 2022 cyqsimon - 0.5.3-4
+- Added post-install scriptlets
+
 * Mon May 16 2022 cyqsimon - 0.5.3-3
 - Apply rpmlint suggestions
 
