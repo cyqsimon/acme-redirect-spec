@@ -2,12 +2,12 @@
 
 Name:           acme-redirect
 Version:        0.5.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        ACME answerer & 80-to-443 redirector
 
 License:        GPLv3
 URL:            https://github.com/kpcyrd/acme-redirect
-Source0:        https://github.com/kpcyrd/acme-redirect/archive/v%{version}.tar.gz
+Source0:        %{url}/archive/v%{version}.tar.gz
 
 BuildRequires:  cargo make rust openssl-devel scdoc
 Requires:       glibc
@@ -32,7 +32,7 @@ target/release/acme-redirect completions fish > fish.completion
     install -d \
         %{buildroot}%{_bindir} \
         %{buildroot}%{_sysconfdir} \
-        %{buildroot}%{_libdir}/systemd/system \
+        %{buildroot}%{_unitdir} \
         %{buildroot}%{_mandir}/man{1,5}
 %endif
 
@@ -49,12 +49,12 @@ install -Dm 644 zsh.completion %{buildroot}%{_datadir}/zsh/site-functions/_acme-
 install -Dm 644 fish.completion %{buildroot}%{_datadir}/fish/vendor_completions.d/acme-redirect.fish
 
 # systemd
-install -Dm 644 -t %{buildroot}%{_libdir}/systemd/system \
+install -Dm 644 -t %{buildroot}%{_unitdir} \
     contrib/systemd/acme-redirect-renew.service \
     contrib/systemd/acme-redirect-renew.timer \
     contrib/systemd/acme-redirect.service
-install -Dm 644 contrib/systemd/acme-redirect.sysusers %{buildroot}%{_libdir}/sysusers.d/acme-redirect.conf
-install -Dm 644 contrib/systemd/acme-redirect.tmpfiles %{buildroot}%{_libdir}/tmpfiles.d/acme-redirect.conf
+install -Dm 644 contrib/systemd/acme-redirect.sysusers %{buildroot}%{_sysusersdir}/acme-redirect.conf
+install -Dm 644 contrib/systemd/acme-redirect.tmpfiles %{buildroot}%{_tmpfilesdir}/acme-redirect.conf
 
 # manpage
 install -Dm 644 -t %{buildroot}%{_mandir}/man1 contrib/docs/acme-redirect.1
@@ -81,11 +81,11 @@ fi
 %{_datadir}/zsh/site-functions/_acme-redirect
 %{_datadir}/fish/vendor_completions.d/acme-redirect.fish
 
-%{_libdir}/systemd/system/acme-redirect-renew.service
-%{_libdir}/systemd/system/acme-redirect-renew.timer
-%{_libdir}/systemd/system/acme-redirect.service
-%{_libdir}/sysusers.d/acme-redirect.conf
-%{_libdir}/tmpfiles.d/acme-redirect.conf
+%{_unitdir}/acme-redirect-renew.service
+%{_unitdir}/acme-redirect-renew.timer
+%{_unitdir}/acme-redirect.service
+%{_sysusersdir}/acme-redirect.conf
+%{_tmpfilesdir}/acme-redirect.conf
 
 %{_mandir}/man1/acme-redirect.1.gz
 %{_mandir}/man5/acme-redirect.conf.5.gz
@@ -95,6 +95,9 @@ fi
 %doc README.md
 
 %changelog
+* Thu Sep 08 2022 cyqsimon - 0.5.3-5
+- Fix systemd files install location
+
 * Wed May 25 2022 cyqsimon - 0.5.3-4
 - Added post-install scriptlets
 
