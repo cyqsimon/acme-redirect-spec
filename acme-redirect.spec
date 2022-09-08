@@ -9,8 +9,7 @@ License:        GPLv3
 URL:            https://github.com/kpcyrd/acme-redirect
 Source0:        %{url}/archive/v%{version}.tar.gz
 
-BuildRequires:  cargo make rust openssl-devel scdoc
-Requires:       glibc
+BuildRequires:  cargo make rust openssl-devel scdoc systemd-rpm-macros
 
 %description
 Tiny http daemon that answers acme challenges and
