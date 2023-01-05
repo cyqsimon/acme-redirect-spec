@@ -1,15 +1,15 @@
 %global debug_package %{nil}
 
 Name:           acme-redirect
-Version:        0.5.3
-Release:        5%{?dist}
+Version:        0.6.2
+Release:        1%{?dist}
 Summary:        ACME answerer & 80-to-443 redirector
 
 License:        GPLv3
 URL:            https://github.com/kpcyrd/acme-redirect
 Source0:        %{url}/archive/v%{version}.tar.gz
 
-BuildRequires:  cargo make rust openssl-devel scdoc systemd-rpm-macros
+BuildRequires:  gcc make pkgconfig(openssl) scdoc systemd-rpm-macros
 
 %description
 Tiny http daemon that answers acme challenges and
@@ -18,12 +18,20 @@ redirects everything else to https
 %prep
 %autosetup
 
+# use latest stable version from rustup
+curl -Lf "https://sh.rustup.rs" | sh -s -- --profile minimal -y
+
 %build
+source ~/.cargo/env
 RUSTFLAGS="-C strip=symbols" cargo build --release
 make docs
 target/release/acme-redirect completions bash > bash.completion
 target/release/acme-redirect completions zsh > zsh.completion
 target/release/acme-redirect completions fish > fish.completion
+
+%check
+source ~/.cargo/env
+cargo test --release
 
 %install
 # `install -D -t <dir>` does not correctly create `<dir>` on EL7
@@ -94,6 +102,11 @@ fi
 %doc README.md
 
 %changelog
+* Thu Jan 05 2023 cyqsimon - 0.6.2-1
+- Release 0.6.2
+- Use latest toolchain from rustup
+- Run tests
+
 * Thu Sep 08 2022 cyqsimon - 0.5.3-5
 - Fix systemd files install location
 
