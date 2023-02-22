@@ -2,7 +2,7 @@
 
 Name:           acme-redirect
 Version:        0.6.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        ACME answerer & 80-to-443 redirector
 
 License:        GPLv3
@@ -74,9 +74,7 @@ systemctl daemon-reload
 systemd-sysusers
 systemd-tmpfiles --create
 
-if systemctl --quiet is-active acme-redirect.service; then
-    systemctl restart acme-redirect.service
-fi
+systemctl try-restart acme-redirect.service
 
 %files
 %{_bindir}/acme-redirect
@@ -102,6 +100,9 @@ fi
 %doc README.md
 
 %changelog
+* Thu Feb 23 2023 cyqsimon - 0.6.2-2
+- Imprv scriptlet
+
 * Thu Jan 05 2023 cyqsimon - 0.6.2-1
 - Release 0.6.2
 - Use latest toolchain from rustup
