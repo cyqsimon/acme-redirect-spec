@@ -2,7 +2,7 @@
 
 Name:           acme-redirect
 Version:        0.6.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        ACME answerer & 80-to-443 redirector
 
 License:        GPLv3
@@ -31,7 +31,7 @@ target/release/acme-redirect completions fish > fish.completion
 
 %check
 source ~/.cargo/env
-cargo test --release
+cargo test
 
 %install
 # `install -D -t <dir>` does not correctly create `<dir>` on EL7
@@ -100,6 +100,9 @@ systemctl try-restart acme-redirect.service
 %doc README.md
 
 %changelog
+* Sat Mar 18 2023 cyqsimon - 0.6.2-3
+- Run tests in debug mode
+
 * Thu Feb 23 2023 cyqsimon - 0.6.2-2
 - Imprv scriptlet
 
