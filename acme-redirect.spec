@@ -34,15 +34,6 @@ source ~/.cargo/env
 cargo test
 
 %install
-# `install -D -t <dir>` does not correctly create `<dir>` on EL7
-%if 0%{?el7}
-    install -d \
-        %{buildroot}%{_bindir} \
-        %{buildroot}%{_sysconfdir} \
-        %{buildroot}%{_unitdir} \
-        %{buildroot}%{_mandir}/man{1,5}
-%endif
-
 # binary
 install -Dm 755 -t %{buildroot}%{_bindir} target/release/acme-redirect
 
