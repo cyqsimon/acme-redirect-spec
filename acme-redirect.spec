@@ -1,8 +1,8 @@
 %global debug_package %{nil}
 
 Name:           acme-redirect
-Version:        0.6.2
-Release:        3%{?dist}
+Version:        0.7.0
+Release:        1%{?dist}
 Summary:        ACME answerer & 80-to-443 redirector
 
 License:        GPLv3
@@ -91,6 +91,9 @@ systemctl try-restart acme-redirect.service
 %doc README.md
 
 %changelog
+* Sat Oct 05 2024 cyqsimon - 0.7.0-1
+- Release 0.7.0
+
 * Sat Mar 18 2023 cyqsimon - 0.6.2-3
 - Run tests in debug mode
 
